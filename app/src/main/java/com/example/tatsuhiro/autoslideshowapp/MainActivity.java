@@ -27,9 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button mStartButton;
     Button mBackButton;
-    Button mStartButtonPause;//保留
+    Button mStartButtonPause;
     Cursor cursor;
-    private TimerTask mTimerTask;
 
 
     @Override
@@ -98,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)  {
 
+                if (mStartButton != null) {
+                    mStartButton.setEnabled(false);//mStartButtonPauseが動いている場合は、進む、戻るは無効
+                }
+
+                if (mBackButton != null) {
+                    mBackButton.setEnabled(false);
+                }
+                if( mTimer == null){
                 mTimer = new Timer();
                 mTimer.schedule(new TimerTask() {
 
@@ -115,6 +122,15 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 }, 100, 2000);    // 最初に始動させるまで 100ミリ秒、ループの間隔を 秒 に設定
+
+            }else if(mTimer != null){
+                    mTimer.cancel();
+                    mTimer = null;
+                    mStartButton.setEnabled(true);
+                    mBackButton.setEnabled(true);
+
+                    return;
+                }
             }
         });
     }
